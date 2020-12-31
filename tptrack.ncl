@@ -1,29 +1,39 @@
 begin
-f=addfile("./wrfout_d02_2019-08-05_00:00:00","r")
+
+;-----第一部分：读取最佳路径------------
+;-----存储变量为xp_best，yp_best-------
 data=asciiread("./besttrack.txt",-1,"string")
 xp_best_t=stringtofloat(str_get_cols(data,17,21))
 yp_best_t=stringtofloat(str_get_cols(data,13,16))
 yp_best=yp_best_t/10.
 xp_best=xp_best_t/10.
 
+;------第二部分：读取模式中slp场--------
+;-----这里有其他程序用slp=wrf_user_getvar(f,"slp",-1)，这个函数本质上即为取气压场最底层数据
+f=addfile("./wrfout_d01_2019-08-05_00:00:00","r")
+p=f->P
+s_p=p(:,0,:,:)
 printMinMax(xp_best,1)
 printMinMax(yp_best,1)
 
-p=f->P
+;------第三部分：追踪台风------------
+;------这里介绍的是，通过找台风路径附近slp场最小值来追踪台风
+;------需要注意：这个方法选择的区域必须十分精确的在某台风路径周围，否则很可能定位到其他低气压区域
 xlon=f->XLONG
 xlat=f->XLAT
-s_p=p(:,0,:,:)
+
 ds=dimsizes(s_p)
 ntim=ds(0)
 nlat=ds(1)
 mlon=ds(2)
-
 
 xp_wrf_t=new(ntim,"float")
 yp_wrf_t=new(ntim,"float")
 
 do k=0,ntim-1
 minp=min(s_p(k,:,:))
+ii=0
+jj=0
  do i=0,nlat-1
 	do j=0,mlon-1
    if(s_p(k,i,j).eq.minp) then
@@ -36,14 +46,25 @@ xp_wrf_t(k)=xlon(k,ii,jj)
 yp_wrf_t(k)=xlat(k,ii,jj)
 end do
 
-xp_wrf=xp_wrf_t(::6)
-yp_wrf=yp_wrf_t(::6)
+xp_wrf=new(17,"float")
+yp_wrf=new(17,"float")
+yp_wrf=yp_wrf_t
+xp_wrf=xp_wrf_t
+
+;-------------------------------------------
+;这一部分注释掉的程序为从一小时间隔的输出中，每六小时确定一次位置的程序（用于多网格嵌套）
+;xp_wrf(0)=xp_wrf_t(0)
+;yp_wrf(0)=yp_wrf_t(0)
+;xp_wrf(1:)=xp_wrf_t(6::6)
+;yp_wrf(1:)=yp_wrf_t(6::6)
+;-------------------------------------------
+
 printMinMax(yp_wrf,1)
 printMinMax(xp_wrf,1)
 
 
-
-   wks      = gsn_open_wks("png","lqm_track")       ; send graphics to PNG file
+;-------第四部分：台风路径画图部分--------
+   wks      = gsn_open_wks("png","lqm_track1")       
 
    res             = True
    res@gsnDraw     = False                         ; don't draw
