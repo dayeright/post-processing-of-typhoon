@@ -1,0 +1,31 @@
+Two types of moving tests are allowed in WRF. In the first option, a user specifies the nest movement in the namelist. The second option is to move the nest automatically, based on an automatic vortex-following algorithm. This option is designed to follow the movement of a well-defined tropical cyclone. 
+To make the specified moving nested run, select the right nesting compile option (option ‘preset moves’). Note that code compiled with this option will not support static nested runs. To run the model, only the coarse grid input files are required. In this option, the nest initialization is defined from the coarse grid data - no nest input is used. In addition to the namelist options applied to a nested run, the following needs to be added to the namelist section &domains: 
+num_moves: the total number of moves one can make in a model run. A move of any domain counts against this total. The maximum is currently set to 50, but it can be changed by changing MAX_MOVES in frame/module_driver_constants.F. move_id: a list of nest IDs, one per move, indicating which domain is to move for a 
+given move. 
+move_interval: the number of minutes from the beginning of the run until a move is supposed to occur. The nest will move on the next time step after the specified instant of model time has passed. move_cd_x,move_cd_y: distance in the number of grid points and direction of the nest move (positive numbers indicate moving toward east and north, while negative numbers indicate moving toward west and south). 
+Parameter max_moves is set to be 50, but can be modified in the source code file frame/module_driver_constants.F, if needed. 
+To make the automatic moving nested runs, select the ‘vortex-following’ option when 
+configuring. Again note that this compile would only support the auto-moving nest, and will not support the specified moving nested run or static nested run at the same time. 
+Again, no nest input is needed. If one wants to use values other than the default ones, add and edit the following namelist variables in the &domains section: 
+vortex_interval: how often the vortex position is calculated in minutes (default is 15 minutes). 
+max_vortex_speed: used with vortex_interval to compute the search radius for the new vortex center position (default is 40 m/sec). 
+corral_dist: the distance in the number of coarse grid cells that the moving nest is allowed to get near the mother domain boundary (default is 8). This parameter can be used to center the telescoped nests so that all nests are moved together with the storm. 
+track_level: the pressure level (in Pa) where the vortex is tracked.
+time_to_move: the time (in minutes) to move a nest. This option may help with the case when the storm is still too weak to be tracked by the algorithm. 
+When the automatic moving nest is employed, the model dumps the vortex center location, with minimum mean sea-level pressure and maximum 10-m winds in a standardout file (e.g. rsl.out.0000). Typing ‘grep ATCF rsl.out.0000’ will produce a list of storm information at a 15-minute interval: 
+ATCF 2007-08-20_12:00:00 20.37 -81.80 929.7 133.9 
+ATCF 2007-08-20_12:15:00 20.29 -81.76 929.3 133.2 
+In both types of moving-nest runs, the initial location of the nest is specified through i_parent_start and j_parent_start in the namelist.input file. 
+Since V3.6, a capability has been added to incorporate high-resolution terrain and landuse input in a moving nest run (Chen, Shuyi S., Wei Zhao, Mark A. Donelan, James F. Price, Edward J. Walsh, 2007: The CBLAST-Hurricane Program and the Next-Generation Fully Coupled Atmosphere–Wave–Ocean Models for Hurricane Research and Prediction. Bull. 
+Amer. Meteor. Soc., 88, 311–317.doi: http://dx.doi.org/10.1175/BAMS-88-3-311). To 
+activate this option,
+ - At compile time, one needs to set the environment variable, TERRAIN_AND_LANDUSE to 1. In cshell, 
+setenv TERRAIN_AND_LANDUSE 1 
+followed by configuring and compiling the code. 
+Beginning with V3.9 of WPS, the default landuse data set is changed to MODIS; however this high-resolution dataset is from USGS, and therefore in order to use this capability, your landuse data should be prepared using USGS. 
+- At run time, add these namelists in &time_control: 
+input_from_hires 
+= .true., .true., 
+rsmas_data_path 
+= “terrain_and_landuse_data_directory” 
+The automatic moving nest works best for a well-developed vortex.
