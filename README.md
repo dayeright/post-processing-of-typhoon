@@ -12,3 +12,11 @@ grep ATCF rsl.out.* >& wrftrack.txt
 nudging run 参考：https://www2.mmm.ucar.edu/wrf/users/wrfv3.1/How_to_run_grid_fdda.html
 
 vortex-following run 参考本项目文件: Moving-Nested Run.txt（搬运自 WRFUsersGuide)
+
+
+#！！关于WPS版本问题可能带来的错误
+在处理2019年，2020年的GFS-FNL数据时，如果WPS版本是4.0以下，可能会在metgrib.exe 时，报错为：Error in ext_pkg_write_field 
+原因为Vatable变量表不是最新的。
+
+处理办法：把WPS升级为4.0版本以上。
+或者 参考https://blog.csdn.net/allein_STR/article/details/104776920 修改变量表等。
