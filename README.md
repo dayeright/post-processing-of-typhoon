@@ -14,7 +14,7 @@ nudging run 参考：https://www2.mmm.ucar.edu/wrf/users/wrfv3.1/How_to_run_grid
 vortex-following run 参考本项目文件: Moving-Nested Run.txt（搬运自 WRFUsersGuide)
 
 
-#！！----关于WPS的错误-----------------
+#！！----关于WPS版本问题的错误-----------------
 
 在处理2019年，2020年的GFS-FNL数据时，如果WPS版本是4.0以下，可能会在metgrib.exe 时，报错为：Error in ext_pkg_write_field 
 原因为Vatable变量表不是最新的。
