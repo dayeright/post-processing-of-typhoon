@@ -305,6 +305,7 @@ vaporV=vaporD
       pV(:,m_i+i,m_j+j)=pD(:,m_i+i,m_j+j)-(pD(:,m_i+i,m_j+j)*E(r)+pDbar(:)*(1-E(r)))
       uV(:,m_i+i,m_j+j)=uD(:,m_i+i,m_j+j)-(uD(:,m_i+i,m_j+j)*E(r)+uDbar(:)*(1-E(r)))
       vV(:,m_i+i,m_j+j)=vD(:,m_i+i,m_j+j)-(vD(:,m_i+i,m_j+j)*E(r)+vDbar(:)*(1-E(r)))
+      tV(:,m_i+i,m_j+j)=tD(:,m_i+i,m_j+j)-(tD(:,m_i+i,m_j+j)*E(r)+tDbar(:)*(1-E(r)))
       phV(:,m_i+i,m_j+j)=phD(:,m_i+i,m_j+j)-(phD(:,m_i+i,m_j+j)*E(r)+phDbar(:)*(1-E(r)))
       vaporV(:,m_i+i,m_j+j)=vaporD(:,m_i+i,m_j+j)-(vaporD(:,m_i+i,m_j+j)*E(r)+vaporDbar(:)*(1-E(r)))
         end do       
@@ -693,6 +694,7 @@ vaporV=vaporD
       pV(:,m_i+i,m_j+j)=pD(:,m_i+i,m_j+j)-(pD(:,m_i+i,m_j+j)*E(r)+pDbar(:)*(1-E(r)))
       uV(:,m_i+i,m_j+j)=uD(:,m_i+i,m_j+j)-(uD(:,m_i+i,m_j+j)*E(r)+uDbar(:)*(1-E(r)))
       vV(:,m_i+i,m_j+j)=vD(:,m_i+i,m_j+j)-(vD(:,m_i+i,m_j+j)*E(r)+vDbar(:)*(1-E(r)))
+      tV(:,m_i+i,m_j+j)=tD(:,m_i+i,m_j+j)-(tD(:,m_i+i,m_j+j)*E(r)+tDbar(:)*(1-E(r)))
       phV(:,m_i+i,m_j+j)=phD(:,m_i+i,m_j+j)-(phD(:,m_i+i,m_j+j)*E(r)+phDbar(:)*(1-E(r)))
       vaporV(:,m_i+i,m_j+j)=vaporD(:,m_i+i,m_j+j)-(vaporD(:,m_i+i,m_j+j)*E(r)+vaporDbar(:)*(1-E(r)))
         end do       
